@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:news_app/screens/login.dart';
 import 'package:news_app/screens/myhomepage.dart';
 import 'package:news_app/screens/signup.dart';
+import 'package:news_app/services/signin_provider.dart';
+import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,17 +15,20 @@ Future main() async {
 
 class MainPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        home: Scaffold(
-          body: StreamBuilder<User?>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return MyHomePage();
-                } else {
-                  return FirstScren();
-                }
-              }),
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: ((context) => GoogleSignInProvider()),
+        child: MaterialApp(
+          home: Scaffold(
+            body: StreamBuilder<User?>(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return MyHomePage();
+                  } else {
+                    return FirstScren();
+                  }
+                }),
+          ),
         ),
       );
 }

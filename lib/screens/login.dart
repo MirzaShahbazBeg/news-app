@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:news_app/screens/signup.dart';
+import 'package:news_app/services/signin_provider.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   //const Login({super.key});
@@ -178,6 +181,32 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 10,
                     ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MaterialButton(
+                          color: Colors.red,
+                          elevation: 2,
+                          onPressed: (() {
+                            final provider = Provider.of<GoogleSignInProvider>(
+                                context,
+                                listen: false);
+                            provider.googleLogin();
+                            // signInWithGoogle(context);
+                          }),
+                          child: Text(
+                            'Sign in with Google',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -229,4 +258,39 @@ class _LoginState extends State<Login> {
           email: emailController.text, password: passwordController.text);
     }
   }
+
+  // Future signInWithGoogle() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //         email: emailController.text, password: passwordController.text);
+  //   }
+  // }
+
+  // function to implement the google signin
+
+// creating firebase instance
+  // final FirebaseAuth auth = FirebaseAuth.instance;
+
+  // Future<void> signInWithGoogle(BuildContext context) async {
+  //   final GoogleSignIn googleSignIn = GoogleSignIn();
+  //   final GoogleSignInAccount? googleSignInAccount =
+  //       await googleSignIn.signIn();
+  //   if (googleSignInAccount != null) {
+  //     final GoogleSignInAuthentication googleSignInAuthentication =
+  //         await googleSignInAccount.authentication;
+  //     final AuthCredential authCredential = GoogleAuthProvider.credential(
+  //         idToken: googleSignInAuthentication.idToken,
+  //         accessToken: googleSignInAuthentication.accessToken);
+
+  //     // Getting users credential
+  //     UserCredential result = await auth.signInWithCredential(authCredential);
+  //     User? user = result.user;
+
+  //     if (result != null) {
+  //       Navigator.pushReplacement(
+  //           context, MaterialPageRoute(builder: (context) => MyHomePage()));
+  //     } // if result not null we simply call the MaterialpageRoute,
+  //     // for go to the HomePage screen
+  //   }
+  // }
 }
